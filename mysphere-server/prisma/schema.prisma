@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id             String     @id @default(cuid())
+  username            String     @unique
+  email               String     @unique
+  password            String
+  full_name           String
+  bio                 String?
+  profile_picture_url String?
+  posts_count         Int        @default(0)
+  followers_count     Int        @default(0)
+  following_count     Int        @default(0)
+  likes               Like[]
+  posts               Post[]
+  comments            Comment[]
+  followers           Follower[] @relation("followers")
+  following           Follower[] @relation("following")
+}
+
+model Post {
+  post_id        String    @id @default(cuid())
+  user_id        String
+  createdAt      DateTime  @default(now())
+  image_url      String
+  caption        String?
+  likes          Like[]
+  likes_count    Int       @default(0)
+  comments       Comment[]
+  comments_count Int       @default(0)
+
+  user User @relation(fields: [user_id], references: [user_id])
+}
+
+model Comment {
+  comment_id String   @id @default(cuid())
+  user_id    String
+  post_id    String
+  createdAt  DateTime @default(now())
+  upadatedAt DateTime @updatedAt
+  text       String
+
+  user User @relation(fields: [user_id], references: [user_id])
+  post Post @relation(fields: [post_id], references: [post_id])
+}
+
+model Like {
+  like_id   String   @id @default(cuid())
+  user_id   String
+  post_id   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [user_id])
+  post Post @relation(fields: [post_id], references: [post_id])
+}
+
+model Follower {
+  follower_user_id  String
+  following_user_id String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  follower          User     @relation("followers", fields: [follower_user_id], references: [user_id])
+  following         User     @relation("following", fields: [following_user_id], references: [user_id])
+
+  @@id([follower_user_id, following_user_id])
+}

@@ -1,0 +1,81 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  user_id String [pk]
+  username String [unique, not null]
+  email String [unique, not null]
+  password String [not null]
+  full_name String [not null]
+  bio String
+  profile_picture_url String
+  posts_count Int [not null, default: 0]
+  followers_count Int [not null, default: 0]
+  following_count Int [not null, default: 0]
+  likes Like [not null]
+  posts Post [not null]
+  comments Comment [not null]
+  followers Follower [not null]
+  following Follower [not null]
+}
+
+Table Post {
+  post_id String [pk]
+  user_id String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  image_url String [not null]
+  caption String
+  likes Like [not null]
+  likes_count Int [not null, default: 0]
+  comments Comment [not null]
+  comments_count Int [not null, default: 0]
+  user User [not null]
+}
+
+Table Comment {
+  comment_id String [pk]
+  user_id String [not null]
+  post_id String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  upadatedAt DateTime [not null]
+  text String [not null]
+  user User [not null]
+  post Post [not null]
+}
+
+Table Like {
+  like_id String [pk]
+  user_id String [not null]
+  post_id String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+  post Post [not null]
+}
+
+Table Follower {
+  follower_user_id String [not null]
+  following_user_id String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  follower User [not null]
+  following User [not null]
+
+  indexes {
+    (follower_user_id, following_user_id) [pk]
+  }
+}
+
+Ref: Post.user_id > User.user_id
+
+Ref: Comment.user_id > User.user_id
+
+Ref: Comment.post_id > Post.post_id
+
+Ref: Like.user_id > User.user_id
+
+Ref: Like.post_id > Post.post_id
+
+Ref: Follower.follower_user_id > User.user_id
+
+Ref: Follower.following_user_id > User.user_id
