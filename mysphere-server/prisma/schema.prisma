@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 generator dbml {
@@ -62,13 +63,15 @@ model Comment {
 }
 
 model Like {
-  like_id   String   @id @default(cuid())
   user_id   String
   post_id   String
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 
   user User @relation(fields: [user_id], references: [user_id])
   post Post @relation(fields: [post_id], references: [post_id])
+
+  @@id(name: "like_id", [user_id, post_id])
 }
 
 model Follower {
@@ -76,8 +79,8 @@ model Follower {
   following_user_id String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  follower          User     @relation("followers", fields: [follower_user_id], references: [user_id])
-  following         User     @relation("following", fields: [following_user_id], references: [user_id])
+  follower          User     @relation("followers", fields: [follower_user_id], references: [user_id]) //user who is following
+  following         User     @relation("following", fields: [following_user_id], references: [user_id]) //user who is being followed
 
-  @@id([follower_user_id, following_user_id])
+  @@id(name: "follower_following", [follower_user_id, following_user_id])
 }
