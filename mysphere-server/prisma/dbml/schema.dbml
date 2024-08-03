@@ -45,12 +45,16 @@ Table Comment {
 }
 
 Table Like {
-  like_id String [pk]
   user_id String [not null]
   post_id String [not null]
+  isActive Boolean [not null, default: true]
   createdAt DateTime [default: `now()`, not null]
   user User [not null]
   post Post [not null]
+
+  indexes {
+    (user_id, post_id) [pk]
+  }
 }
 
 Table Follower {
