@@ -3,26 +3,23 @@ import gql from "graphql-tag";
 export const typeDefs = gql`
 type Query {
     getProfile(username: String!): User
-    getPosts(username: String): [Post!]
-    getPost(post_id:ID!):Post
-    getCommnets(post_id:ID!):[Comment!]
-    getFollowers(user_id:ID!):[Follower!]
-    getFollowing(user_id:ID!):[Follower!]
+    getPosts(user_id: ID!): [Post!]
+    getPost(post_id:ID!): Post
+    getCommnets(post_id:ID!): [Comment!]
+    getLikes(post_id:ID!): [Like!]
+    getFollowers(user_id:ID!): [Follower!]
+    getFollowing(user_id:ID!): [Follower!]
 }
-
 type Mutation {
     login(username: String!, password: String!): AuthPayload!
-    signup(email:String!, username: String!, password: String!, full_name: String!): AuthPayload! #currently it is sending the AuthPayload. Signup should first send an email verification
-    updateProfile(user_id:ID!, username:String, password:String, full_name:String, bio:String, profile_picture_url:String):User!
-    createPost(  user_id: ID!, image_url: String!, caption: String): Post!
-    comment(post_id: ID!, text: String!, user_id: ID!): Comment!
-    like(post_id: ID!, user_id: ID!): Like!
-    follow(follower_id:ID!, following_id:ID!): Follower!
-    unfollow(follower_id:ID!, following_id:ID!):Follower!
+    signup(email:String!, password: String!, full_name: String!): AuthPayload! #currently it is sending the AuthPayload. Signup should first send an email verification
+    updateProfile(full_name:String, bio:String, profile_picture_url:String):User!
+    createPost(image_url: String!, caption: String): Post!
+    comment(post_id: ID!,text: String!): Comment!
+    like(post_id: ID!): Like!
+    follow(following_id:ID!): Follower!
+    unfollow(following_id:ID!):Follower!
 }
-
-
-
 type AuthPayload {
     token: String!
     user: AuthUser!
@@ -35,8 +32,6 @@ type AuthUser{
 type User {
   user_id: ID!
   username: String!
-  email: String!
-  password: String!
   full_name: String!
   bio: String
   profile_picture_url: String
