@@ -11,7 +11,7 @@ async function startApolloServer() {
   const server = new ApolloServer({ typeDefs, resolvers });
   const { url } = await startStandaloneServer(server, {
     context: async ({ req }) => {
-      const token = req.headers.authorization?.split(" ")[1]; // Bearer token
+      const token = req.headers.authorization?.split(" ")[1];
       if (!token) return { user: null };
       try {
         const decoded = Jwt.verify(token, JWT_SECRET);
@@ -28,6 +28,6 @@ async function startApolloServer() {
 
     listen: { port: 3000, path: "/graphql" }
   });
-  console.log(`🚀 Server running at ${url}.You canq querry on http://localhost:3000/graphql`);
+  console.log(`🚀 Server running at ${url}/graphql`);
 }
 startApolloServer();

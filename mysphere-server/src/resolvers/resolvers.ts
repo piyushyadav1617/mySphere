@@ -1,7 +1,20 @@
 import { loginResolver, signupResolver } from "./authResolvers";
 import { followResolver, unfollowResovler } from "./followResolver";
-import { commentsResolver, createCommentResolver, createPostResolver, likePostResolver, likesResolver, postsResolver, signlePostResolver } from "./postResolver";
-import { followingResolver, followerResolver, profileResolver, updateProfileResovler } from "./profileResolvers";
+import {
+    commentsResolver,
+    createCommentResolver,
+    createPostResolver,
+    likePostResolver,
+    likesResolver,
+    postsResolver,
+    signlePostResolver
+} from "./postResolver";
+import {
+    followingResolver,
+    followerResolver,
+    profileResolver,
+    updateProfileResovler
+} from "./profileResolvers";
 
 
 export const resolvers = {
